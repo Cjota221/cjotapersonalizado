@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro em Massa - <%= store.name %></title>
+  <link rel="stylesheet" href="/css/nuvemshop-admin.css">
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <h2><%= store.name %></h2>
+      </div>
+      <nav class="admin-sidebar-nav">
+        <a href="/dashboard" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/dashboard/produtos" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 7h-4v14h4V7zM12 3h-2v18h2V3zM4 11H2v10h2V11z"/>
+          </svg>
+          <span>Produtos</span>
+        </a>
+        <a href="/dashboard/cadastro-massa" class="nav-item active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Cadastro em Massa</span>
+        </a>
+        <a href="/dashboard/orders" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+          </svg>
+          <span>Pedidos</span>
+        </a>
+        <a href="/dashboard/store-settings" class="nav-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l-4.2 4.2m10.4 0l-4.2-4.2m0-6l-4.2-4.2"></path>
+          </svg>
+          <span>Configurações</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="admin-header">
+        <div>
+          <h1>Cadastro em Massa de Produtos</h1>
+          <p>Envie múltiplas imagens e crie produtos de forma rápida</p>
+        </div>
+      </div>
+
+      <div class="admin-content">
+        <!-- Upload Zone -->
+        <div class="upload-section">
+          <form id="uploadForm" enctype="multipart/form-data">
+            <div class="upload-zone" id="uploadZone">
+              <input type="file" id="fileInput" name="images" multiple accept="image/*" hidden>
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <h3>Arraste e solte suas imagens aqui</h3>
+              <p>ou</p>
+              <button type="button" class="btn btn-secondary" id="selectFilesBtn">
+                Selecionar Arquivos
+              </button>
+              <p class="upload-help">Formatos aceitos: JPG, PNG, GIF, WEBP • Máximo 10MB por arquivo</p>
+            </div>
+          </form>
+        </div>
+
+        <!-- File List -->
+        <div id="fileListContainer" style="display: none;">
+          <div class="section-header">
+            <h2>Arquivos Selecionados</h2>
+            <button type="button" class="btn btn-text" id="clearFilesBtn">Limpar Tudo</button>
+          </div>
+          <div id="fileList" class="file-list"></div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary btn-lg" id="uploadBtn">
+              Processar <span id="fileCount">0</span> Arquivos
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Imports -->
+        <% if (recentImports && recentImports.length > 0) { %>
+        <div class="recent-imports-section">
+          <h2>Importações Recentes</h2>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Arquivos</th>
+                  <th>Produtos</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentImports.forEach(imp => { %>
+                <tr>
+                  <td><%= new Date(imp.created_at).toLocaleString('pt-BR') %></td>
+                  <td><%= imp.total_files || 0 %></td>
+                  <td><%= imp.total_products_generated || 0 %></td>
+                  <td>
+                    <% if (imp.status === 'concluido') { %>
+                      <span class="badge badge-success">Concluído</span>
+                    <% } else if (imp.status === 'erro') { %>
+                      <span class="badge badge-error">Erro</span>
+                    <% } else if (imp.status === 'revisao') { %>
+                      <span class="badge badge-warning">Em Revisão</span>
+                    <% } else { %>
+                      <span class="badge badge-neutral">Processando</span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <% if (imp.status === 'revisao') { %>
+                      <a href="/dashboard/cadastro-massa/<%= imp.id %>/revisao" class="btn btn-sm btn-secondary">
+                        Continuar
+                      </a>
+                    <% } %>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </main>
+  </div>
+
+  <style>
+    .upload-section {
+      margin-bottom: 3rem;
+    }
+    
+    .upload-zone {
+      border: 2px dashed var(--color-border);
+      border-radius: 12px;
+      padding: 4rem 2rem;
+      text-align: center;
+      background: var(--color-background);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: var(--color-primary);
+      background: rgba(0, 102, 255, 0.02);
+    }
+    
+    .upload-zone svg {
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+    
+    .upload-zone h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    
+    .upload-zone p {
+      color: var(--color-text-secondary);
+      margin: 0.5rem 0;
+    }
+    
+    .upload-help {
+      font-size: 0.875rem;
+      margin-top: 1rem;
+    }
+    
+    .file-list {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--color-background);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+    
+    .file-item:hover {
+      border-color: var(--color-primary);
+    }
+    
+    .file-thumbnail {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: var(--color-border);
+    }
+    
+    .file-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .file-name {
+      font-weight: 500;
+      margin: 0 0 0.25rem 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .file-size {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+    
+    .file-remove {
+      background: none;
+      border: none;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s ease;
+    }
+    
+    .file-remove:hover {
+      color: var(--color-error);
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-header h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .recent-imports-section {
+      margin-top: 3rem;
+    }
+    
+    .recent-imports-section h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+  </style>
+
+  <script>
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const selectFilesBtn = document.getElementById('selectFilesBtn');
+    const fileListContainer = document.getElementById('fileListContainer');
+    const fileList = document.getElementById('fileList');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const clearFilesBtn = document.getElementById('clearFilesBtn');
+    const fileCountSpan = document.getElementById('fileCount');
+    
+    let selectedFiles = [];
+    
+    // Drag & Drop
+    uploadZone.addEventListener('click', () => fileInput.click());
+    selectFilesBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fileInput.click();
+    });
+    
+    uploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.classList.add('drag-over');
+    });
+    
+    uploadZone.addEventListener('dragleave', () => {
+      uploadZone.classList.remove('drag-over');
+    });
+    
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('drag-over');
+      const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+      addFiles(files);
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+      addFiles(Array.from(e.target.files));
+    });
+    
+    function addFiles(files) {
+      selectedFiles = [...selectedFiles, ...files];
+      updateFileList();
+    }
+    
+    function updateFileList() {
+      if (selectedFiles.length === 0) {
+        fileListContainer.style.display = 'none';
+        return;
+      }
+      
+      fileListContainer.style.display = 'block';
+      fileCountSpan.textContent = selectedFiles.length;
+      
+      fileList.innerHTML = selectedFiles.map((file, index) => `
+        <div class="file-item">
+          <img src="${URL.createObjectURL(file)}" class="file-thumbnail" alt="${file.name}">
+          <div class="file-info">
+            <p class="file-name">${file.name}</p>
+            <p class="file-size">${formatFileSize(file.size)}</p>
+          </div>
+          <button type="button" class="file-remove" data-index="${index}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      `).join('');
+      
+      // Event listeners para remover
+      document.querySelectorAll('.file-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const index = parseInt(btn.dataset.index);
+          selectedFiles.splice(index, 1);
+          updateFileList();
+        });
+      });
+    }
+    
+    clearFilesBtn.addEventListener('click', () => {
+      selectedFiles = [];
+      fileInput.value = '';
+      updateFileList();
+    });
+    
+    uploadBtn.addEventListener('click', async () => {
+      if (selectedFiles.length === 0) return;
+      
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = 'Processando...';
+      
+      const formData = new FormData();
+      selectedFiles.forEach(file => {
+        formData.append('images', file);
+      });
+      
+      try {
+        const response = await fetch('/dashboard/cadastro-massa/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          window.location.href = result.nextStep;
+        } else {
+          alert('Erro: ' + result.error);
+          uploadBtn.disabled = false;
+          uploadBtn.innerHTML = 'Processar <span id="fileCount">' + selectedFiles.length + '</span> Arquivos';
+        }
+      } catch (error) {
+        console.error('Erro no upload:', error);
+        alert('Erro ao processar arquivos');
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = 'Processar <span id="fileCount">' + selectedFiles.length + '</span> Arquivos';
+      }
+    });
+    
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+  </script>
+</body>
+</html>

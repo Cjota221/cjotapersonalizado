@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos - <%= store.store_name %></title>
+  <link rel="stylesheet" href="/css/nuvemshop-admin.css">
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 32px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .close {
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #6f767e;
+    }
+    .close:hover {
+      color: #1a1d1f;
+    }
+    .order-items-list {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+    }
+    .order-items-list li {
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+    .whatsapp-message {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <a href="/dashboard" class="sidebar-logo">CJota Admin</a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Principal</div>
+          <a href="/dashboard" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </a>
+          <a href="/dashboard/produtos" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3h18v18H3z"></path>
+              <path d="M3 9h18"></path>
+              <path d="M9 21V9"></path>
+            </svg>
+            Produtos
+          </a>
+          <a href="/dashboard/orders" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 2L3 8v13h18V8l-6-6H9z"></path>
+              <polyline points="9 8 9 2 15 2 15 8"></polyline>
+            </svg>
+            Pedidos
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Configura��es</div>
+          <a href="/dashboard/store-settings" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4m0 12v4m8-10h-4m-12 0H0m15.364 6.364l-2.828-2.828m-8.486 0L1.222 18.364M18.364 5.636l-2.828 2.828m-8.486 0L4.222 5.636"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            Loja
+          </a>
+          <a href="/dashboard/branding" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            Personaliza��o
+          </a>
+        </div>
+      </nav>
+    </aside>
+    
+    <!-- Conte�do Principal -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <h1 class="page-title">Pr�-Pedidos Recebidos</h1>
+      </header>
+      
+      <div class="admin-content">
+        
+        <% if (orders.length === 0) { %>
+          <!-- Estado Vazio -->
+          <div class="card">
+            <div class="card-body" style="text-align: center; padding: 64px 32px;">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#c8ccd0" stroke-width="2" style="margin: 0 auto 24px;">
+                <path d="M9 2L3 8v13h18V8l-6-6H9z"></path>
+                <polyline points="9 8 9 2 15 2 15 8"></polyline>
+              </svg>
+              <h3 style="font-size: 18px; font-weight: 600; color: #6f767e; margin-bottom: 8px;">
+                Nenhum pedido recebido ainda
+              </h3>
+              <p style="color: #9ca3af;">
+                Os pedidos dos clientes aparecer�o aqui quando forem enviados via WhatsApp.
+              </p>
+            </div>
+          </div>
+        <% } else { %>
+          <!-- Tabela de Pedidos -->
+          <div class="card">
+            <div class="card-body" style="padding: 0;">
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Cliente</th>
+                      <th>WhatsApp</th>
+                      <th>Localidade</th>
+                      <th>Itens</th>
+                      <th>Status</th>
+                      <th>Data</th>
+                      <th style="text-align: right;">A��es</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% orders.forEach(order => { %>
+                      <tr>
+                        <td><strong>#<%= order.id %></strong></td>
+                        <td><%= order.customer_name %></td>
+                        <td><%= order.customer_whatsapp %></td>
+                        <td><%= [order.customer_city, order.customer_state].filter(Boolean).join('/') %></td>
+                        <td><%= order.items.length %> item(ns)</td>
+                        <td>
+                          <% if (order.status === 'pending') { %>
+                            <span class="badge badge-warning">Pendente</span>
+                          <% } else if (order.status === 'contacted') { %>
+                            <span class="badge badge-neutral">Contatado</span>
+                          <% } else if (order.status === 'confirmed') { %>
+                            <span class="badge badge-success">Confirmado</span>
+                          <% } else { %>
+                            <span class="badge badge-error">Cancelado</span>
+                          <% } %>
+                        </td>
+                        <td><%= new Date(order.created_at).toLocaleDateString('pt-BR') %></td>
+                        <td style="text-align: right;">
+                          <button class="btn btn-sm btn-secondary" onclick="viewOrder(<%= order.id %>)">Ver detalhes</button>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <% } %>
+        
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal para visualizar pedido -->
+  <div id="order-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    const ordersData = <%- JSON.stringify(orders) %>;
+    
+    function viewOrder(id) {
+      const order = ordersData.find(o => o.id === id);
+      if (!order) return;
+      
+      let itemsHtml = '<ul class="order-items-list">';
+      order.items.forEach(item => {
+        const variant = [item.variant_size, item.variant_color].filter(Boolean).join(' - ');
+        itemsHtml += `<li><strong>${item.product_name}</strong>${variant ? ' (' + variant + ')' : ''} - Qtd: ${item.qty}</li>`;
+      });
+      itemsHtml += '</ul>';
+      
+      const statusMap = {
+        'pending': 'Pendente',
+        'contacted': 'Contatado',
+        'confirmed': 'Confirmado',
+        'cancelled': 'Cancelado'
+      };
+      
+      const html = `
+        <h2 style="margin-bottom: 24px; color: #1a1d1f;">Pedido #${order.id}</h2>
+        
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 14px; color: #6f767e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Cliente</h3>
+          <p style="margin: 0;"><strong>${order.customer_name}</strong></p>
+          <p style="margin: 4px 0 0;">WhatsApp: ${order.customer_whatsapp}</p>
+          <p style="margin: 4px 0 0;">Localidade: ${[order.customer_city, order.customer_state].filter(Boolean).join('/')}</p>
+        </div>
+        
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 14px; color: #6f767e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Informa��es</h3>
+          <p style="margin: 0;">Status: <strong>${statusMap[order.status] || order.status}</strong></p>
+          <p style="margin: 4px 0 0;">Data: ${new Date(order.created_at).toLocaleString('pt-BR')}</p>
+          ${order.note ? `<p style="margin: 4px 0 0;">Observa��es: ${order.note}</p>` : ''}
+        </div>
+        
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 14px; color: #6f767e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Itens do Pedido</h3>
+          ${itemsHtml}
+        </div>
+        
+        ${order.whatsapp_message ? `
+          <div>
+            <h3 style="font-size: 14px; color: #6f767e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Mensagem WhatsApp</h3>
+            <div class="whatsapp-message">${order.whatsapp_message}</div>
+          </div>
+        ` : ''}
+      `;
+      
+      document.getElementById('modal-body').innerHTML = html;
+      document.getElementById('order-modal').style.display = 'block';
+    }
+    
+    function closeModal() {
+      document.getElementById('order-modal').style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+      const modal = document.getElementById('order-modal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>

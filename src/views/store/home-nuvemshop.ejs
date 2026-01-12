@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= siteSettings?.site_name || 'Catálogo' %></title>
+  <link rel="stylesheet" href="/css/nuvemshop-store.css">
+  
+  <% if (typeof themeCSS !== 'undefined' && themeCSS) { %>
+    <style><%= themeCSS %></style>
+  <% } %>
+</head>
+<body>
+  <!-- Header -->
+  <header class="store-header">
+    <div class="header-container">
+      <a href="/" class="store-logo">
+        <% if (siteSettings?.logo_url) { %>
+          <img src="<%= siteSettings.logo_url %>" alt="<%= siteSettings.site_name %>">
+        <% } else { %>
+          <%= siteSettings?.site_name || 'CJota' %>
+        <% } %>
+      </a>
+      
+      <nav class="store-nav">
+        <a href="/produtos" class="nav-link">Produtos</a>
+        <a href="/categorias" class="nav-link">Categorias</a>
+        <a href="/como-funciona" class="nav-link">Como funciona</a>
+        <a href="/contato" class="nav-link">Contato</a>
+      </nav>
+      
+      <div class="header-actions">
+        <button class="cart-button" onclick="window.location.href='/carrinho'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span>Pedido</span>
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Hero Banner -->
+  <% if (activeBanners && activeBanners.length > 0) { %>
+    <section class="hero-banner">
+      <img src="<%= activeBanners[0].image_url %>" alt="<%= activeBanners[0].title %>" class="hero-image">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title"><%= activeBanners[0].title %></h1>
+        <% if (activeBanners[0].subtitle) { %>
+          <p class="hero-subtitle"><%= activeBanners[0].subtitle %></p>
+        <% } %>
+        <% if (activeBanners[0].link_url) { %>
+          <a href="<%= activeBanners[0].link_url %>" class="btn btn-primary btn-lg">
+            <%= activeBanners[0].link_text || 'Ver produtos' %>
+          </a>
+        <% } %>
+      </div>
+    </section>
+  <% } %>
+  
+  <!-- Produtos em Destaque -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Produtos em Destaque</h2>
+        <p class="section-subtitle">Monte seu pedido e finalize pelo WhatsApp</p>
+      </div>
+      
+      <div class="products-grid">
+        <% if (products && products.length > 0) { %>
+          <% products.forEach(product => { %>
+            <a href="/produto/<%= product.id %>" class="product-card">
+              <div class="product-image-container">
+                <% if (product.images && product.images.length > 0) { %>
+                  <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="product-image">
+                <% } else { %>
+                  <img src="https://via.placeholder.com/400x533" alt="<%= product.name %>" class="product-image">
+                <% } %>
+                <% if (product.is_new) { %>
+                  <span class="product-badge">Novo</span>
+                <% } %>
+              </div>
+              <div class="product-info">
+                <% if (product.category) { %>
+                  <div class="product-category"><%= product.category %></div>
+                <% } %>
+                <h3 class="product-name"><%= product.name %></h3>
+                <% if (product.price) { %>
+                  <div class="product-price">
+                    R$ <%= (product.price / 100).toFixed(2).replace('.', ',') %>
+                  </div>
+                <% } %>
+              </div>
+            </a>
+          <% }) %>
+        <% } else { %>
+          <div class="empty-state" style="grid-column: 1/-1;">
+            <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3h18v18H3z"></path>
+              <path d="M3 9h18"></path>
+              <path d="M9 21V9"></path>
+            </svg>
+            <h3 class="empty-state-title">Nenhum produto cadastrado</h3>
+            <p class="empty-state-text">Em breve teremos novidades por aqui!</p>
+          </div>
+        <% } %>
+      </div>
+      
+      <div style="text-align: center; margin-top: 48px;">
+        <a href="/produtos" class="btn btn-secondary btn-lg">Ver todos os produtos</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Como Funciona -->
+  <section class="section" style="background: #f5f7fa;">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Como funciona</h2>
+        <p class="section-subtitle">Simples e rápido</p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px;">
+        <div style="text-align: center;">
+          <div style="width: 64px; height: 64px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+              <path d="M3 9h18"></path>
+              <path d="M9 21V9"></path>
+            </svg>
+          </div>
+          <h4 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">1. Escolha os produtos</h4>
+          <p style="color: #6f767e; font-size: 14px;">Navegue pelo catálogo e adicione os itens desejados</p>
+        </div>
+        
+        <div style="text-align: center;">
+          <div style="width: 64px; height: 64px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <h4 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">2. Informe seus dados</h4>
+          <p style="color: #6f767e; font-size: 14px;">Nome, WhatsApp e cidade para contato</p>
+        </div>
+        
+        <div style="text-align: center;">
+          <div style="width: 64px; height: 64px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <h4 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">3. Finalize pelo WhatsApp</h4>
+          <p style="color: #6f767e; font-size: 14px;">Confirme frete e pagamento com nossa equipe</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="store-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4><%= siteSettings?.site_name || 'CJota' %></h4>
+          <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 8px;">
+            <%= siteSettings?.site_description || 'Catálogo de produtos com pedidos por encomenda' %>
+          </p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Navegação</h4>
+          <ul class="footer-links">
+            <li><a href="/produtos">Produtos</a></li>
+            <li><a href="/categorias">Categorias</a></li>
+            <li><a href="/como-funciona">Como funciona</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Contato</h4>
+          <ul class="footer-links">
+            <% if (siteSettings?.whatsapp_number) { %>
+              <li><a href="https://wa.me/<%= siteSettings.whatsapp_number %>">WhatsApp</a></li>
+            <% } %>
+            <% if (siteSettings?.email) { %>
+              <li><a href="mailto:<%= siteSettings.email %>"><%= siteSettings.email %></a></li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; <%= new Date().getFullYear() %> <%= siteSettings?.site_name || 'CJota' %>. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Atualizar contador do carrinho
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      document.getElementById('cart-count').textContent = count;
+    }
+    
+    updateCartCount();
+  </script>
+</body>
+</html>
