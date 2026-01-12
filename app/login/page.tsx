@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -15,16 +16,41 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     
-    // Credenciais fixas para demo
-    if (email === 'carolineazevedo075@gmail.com' && password === 'Cjota@015') {
-      // Login bem-sucedido
-      localStorage.setItem('isLoggedIn', 'true')
-      router.push('/dashboard')
-    } else {
-      setError('E-mail ou senha incorretos')
+    try {
+      const supabase = createClient()
+      
+      // Tentar fazer login no Supabase Auth
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+      
+      if (signInError) {
+        console.error('Erro de login:', signInError)
+        
+        // Mensagens de erro mais amigáveis
+        if (signInError.message.includes('Invalid login credentials')) {
+          setError('E-mail ou senha incorretos. Verifique suas credenciais.')
+        } else if (signInError.message.includes('Email not confirmed')) {
+          setError('E-mail não confirmado. Verifique sua caixa de entrada.')
+        } else {
+          setError(signInError.message)
+        }
+        setLoading(false)
+        return
+      }
+      
+      if (data.user) {
+        console.log('Login bem-sucedido:', data.user.email)
+        // Redirecionar para o dashboard
+        router.push('/dashboard')
+        router.refresh()
+      }
+    } catch (err: any) {
+      console.error('Erro inesperado:', err)
+      setError('Erro ao fazer login. Tente novamente.')
+      setLoading(false)
     }
-    
-    setLoading(false)
   }
   
   return (
