@@ -13,16 +13,16 @@ export default async function ConfiguracoesPage() {
   
   return (
     <AdminLayout storeName={store?.store_name} storeSlug={store?.slug}>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Configurações</h1>
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-gray-900">Configurações</h1>
         <p className="text-sm text-gray-500 mt-1">Gerencie as configurações gerais do sistema</p>
       </div>
       
       <div className="max-w-3xl space-y-6">
         <div className="card">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Informações da Loja</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Informações da Loja</h2>
           
-          <div className="space-y-5">
+          <div className="space-y-4">
             <div>
               <label className="form-label">Nome da Loja</label>
               <input 
@@ -59,9 +59,9 @@ export default async function ConfiguracoesPage() {
         </div>
         
         <div className="card">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Contato</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Contato</h2>
           
-          <div className="space-y-5">
+          <div className="space-y-4">
             <div>
               <label className="form-label">WhatsApp Oficial</label>
               <input 

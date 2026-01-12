@@ -5,7 +5,7 @@ import Link from 'next/link'
 export default function AdminTopbar({ storeName, storeSlug }: { storeName?: string; storeSlug?: string }) {
   return (
     <header style={{
-      height: '64px',
+      height: '56px',
       backgroundColor: 'white',
       borderBottom: '1px solid #e5e7eb',
       position: 'fixed',
@@ -16,12 +16,12 @@ export default function AdminTopbar({ storeName, storeSlug }: { storeName?: stri
     }}>
       <div style={{
         height: '100%',
-        padding: '0 1.5rem',
+        padding: '0 1.25rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <h2 style={{
             fontSize: '0.875rem',
             fontWeight: 500,
@@ -31,7 +31,7 @@ export default function AdminTopbar({ storeName, storeSlug }: { storeName?: stri
           </h2>
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           {storeSlug && (
             <Link
               href={`/${storeSlug}`}

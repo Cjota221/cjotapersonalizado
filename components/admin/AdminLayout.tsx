@@ -15,8 +15,9 @@ export default function AdminLayout({
       <AdminSidebar />
       <AdminTopbar storeName={storeName} storeSlug={storeSlug} />
       
-      <main style={{ marginLeft: '256px', paddingTop: '64px' }}>
-        <div style={{ padding: '2rem' }}>
+      {/* REDUZIDO: padding de 2rem para 1.5rem */}
+      <main style={{ marginLeft: '256px', paddingTop: '56px' }}>
+        <div style={{ padding: '1.5rem' }}>
           {children}
         </div>
       </main>

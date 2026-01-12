@@ -67,28 +67,30 @@ export default function AdminSidebar() {
       left: 0,
       top: 0
     }}>
+      {/* REDUZIDO: padding de 1.5rem para 1rem */}
       <div style={{
-        padding: '1.5rem',
+        padding: '1rem',
         borderBottom: '1px solid #e5e7eb'
       }}>
         <h1 style={{
-          fontSize: '1.25rem',
+          fontSize: '1.125rem',
           fontWeight: 'bold',
           color: '#111827'
         }}>CJota Sistema</h1>
         <p style={{
           fontSize: '0.75rem',
           color: '#6b7280',
-          marginTop: '0.25rem'
+          marginTop: '0.125rem'
         }}>Pedidos por Encomenda</p>
       </div>
       
+      {/* REDUZIDO: padding de 1rem para 0.75rem */}
       <nav style={{
         flex: 1,
-        padding: '1rem',
+        padding: '0.75rem',
         overflowY: 'auto'
       }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>
           {menuItems.map((item) => {
             const isActive = pathname === item.href
             return (
@@ -98,9 +100,9 @@ export default function AdminSidebar() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.625rem 0.75rem',
-                  borderRadius: '0.5rem',
+                  gap: '0.625rem',
+                  padding: '0.5rem 0.625rem',
+                  borderRadius: '0.375rem',
                   fontSize: '0.875rem',
                   fontWeight: 500,
                   textDecoration: 'none',
@@ -117,15 +119,16 @@ export default function AdminSidebar() {
         </div>
       </nav>
       
+      {/* REDUZIDO: padding do footer */}
       <div style={{
-        padding: '1rem',
+        padding: '0.75rem',
         borderTop: '1px solid #e5e7eb'
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.75rem',
-          padding: '0.75rem'
+          gap: '0.625rem',
+          padding: '0.5rem'
         }}>
           <div style={{
             width: '32px',

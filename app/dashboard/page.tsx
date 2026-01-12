@@ -17,20 +17,24 @@ export default async function DashboardPage() {
   
   return (
     <AdminLayout storeName={store?.store_name} storeSlug={store?.slug}>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+      {/* REDUZIDO: mb-8 para mb-6 */}
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-sm text-gray-500 mt-1">Visão geral do seu sistema de pedidos</p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {/* REDUZIDO: gap-6 para gap-4, mb-8 para mb-6 */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="card">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Total de Produtos</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{productsCount || 0}</p>
+              {/* REDUZIDO: text-3xl para text-2xl, mt-2 para mt-1 */}
+              <p className="text-2xl font-bold text-gray-900 mt-1">{productsCount || 0}</p>
             </div>
-            <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* REDUZIDO: w-12 h-12 para w-10 h-10, w-6 h-6 para w-5 h-5 */}
+            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
             </div>
@@ -41,10 +45,10 @@ export default async function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Pedidos Pendentes</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">{ordersCount || 0}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{ordersCount || 0}</p>
             </div>
-            <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
             </div>
@@ -55,11 +59,12 @@ export default async function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Sua Loja</p>
-              <p className="text-lg font-semibold text-gray-900 mt-2">{store?.store_name || 'Não configurada'}</p>
+              {/* REDUZIDO: text-lg para text-base, mt-2 para mt-1 */}
+              <p className="text-base font-semibold text-gray-900 mt-1">{store?.store_name || 'Não configurada'}</p>
               <p className="text-xs text-gray-500">/{store?.slug || 'sem-slug'}</p>
             </div>
-            <div className="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
+              <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
@@ -68,9 +73,11 @@ export default async function DashboardPage() {
       </div>
       
       <div className="card">
-        <div className="flex items-center justify-between mb-6">
+        {/* REDUZIDO: mb-6 para mb-4 */}
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Pedidos Recentes</h2>
+            {/* REDUZIDO: text-lg para text-base */}
+            <h2 className="text-base font-semibold text-gray-900">Pedidos Recentes</h2>
             <p className="text-sm text-gray-500 mt-1">Últimos pedidos recebidos pelo sistema</p>
           </div>
           <Link href="/dashboard/pedidos" className="btn btn-secondary btn-sm">
@@ -119,8 +126,8 @@ export default async function DashboardPage() {
             </table>
           </div>
         ) : (
-          <div className="text-center py-12">
-            <svg className="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center py-8">
+            <svg className="w-10 h-10 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <p className="text-gray-500 text-sm">Nenhum pedido recebido ainda</p>
