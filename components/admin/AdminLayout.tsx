@@ -1,4 +1,4 @@
-import AdminSidebar from './AdminSidebar'
+﻿import AdminSidebar from './AdminSidebar'
 import AdminTopbar from './AdminTopbar'
 
 export default function AdminLayout({
@@ -11,12 +11,12 @@ export default function AdminLayout({
   storeSlug?: string
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
       <AdminSidebar />
       <AdminTopbar storeName={storeName} storeSlug={storeSlug} />
       
-      <main className="ml-64 pt-16">
-        <div className="p-8">
+      <main style={{ marginLeft: '256px', paddingTop: '64px' }}>
+        <div style={{ padding: '2rem' }}>
           {children}
         </div>
       </main>

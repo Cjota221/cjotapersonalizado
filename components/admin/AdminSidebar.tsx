@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -56,40 +56,108 @@ export default function AdminSidebar() {
   const pathname = usePathname()
   
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen fixed left-0 top-0">
-      <div className="p-6 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-gray-900">CJota Sistema</h1>
-        <p className="text-xs text-gray-500 mt-1">Pedidos por Encomenda</p>
+    <aside style={{
+      width: '256px',
+      backgroundColor: 'white',
+      borderRight: '1px solid #e5e7eb',
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100vh',
+      position: 'fixed',
+      left: 0,
+      top: 0
+    }}>
+      <div style={{
+        padding: '1.5rem',
+        borderBottom: '1px solid #e5e7eb'
+      }}>
+        <h1 style={{
+          fontSize: '1.25rem',
+          fontWeight: 'bold',
+          color: '#111827'
+        }}>CJota Sistema</h1>
+        <p style={{
+          fontSize: '0.75rem',
+          color: '#6b7280',
+          marginTop: '0.25rem'
+        }}>Pedidos por Encomenda</p>
       </div>
       
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {menuItems.map((item) => {
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </Link>
-          )
-        })}
+      <nav style={{
+        flex: 1,
+        padding: '1rem',
+        overflowY: 'auto'
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+          {menuItems.map((item) => {
+            const isActive = pathname === item.href
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '0.625rem 0.75rem',
+                  borderRadius: '0.5rem',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  textDecoration: 'none',
+                  backgroundColor: isActive ? '#eff6ff' : 'transparent',
+                  color: isActive ? '#1d4ed8' : '#374151',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </Link>
+            )
+          })}
+        </div>
       </nav>
       
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex items-center gap-3 px-3 py-2">
-          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-            <span className="text-sm font-semibold text-blue-700">C</span>
+      <div style={{
+        padding: '1rem',
+        borderTop: '1px solid #e5e7eb'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          padding: '0.75rem'
+        }}>
+          <div style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: '#dbeafe',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <span style={{
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              color: '#1d4ed8'
+            }}>C</span>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">Caroline</p>
-            <p className="text-xs text-gray-500 truncate">Admin</p>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              color: '#111827',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}>Caroline</p>
+            <p style={{
+              fontSize: '0.75rem',
+              color: '#6b7280',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}>Admin</p>
           </div>
         </div>
       </div>
