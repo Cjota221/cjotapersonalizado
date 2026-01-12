@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -15,21 +15,21 @@ export default function StoreHeader({ slug, storeName, logo }: StoreHeaderProps)
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href={`/${slug}`} className="flex items-center gap-3">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <Link href={`/${slug}`} className="flex items-center gap-2">
           {logo && (
-            <div className="relative w-12 h-12 rounded-lg overflow-hidden">
+            <div className="relative w-10 h-10 rounded-lg overflow-hidden">
               <Image src={logo} alt={storeName} fill className="object-cover" />
             </div>
           )}
-          <span className="text-xl font-bold text-gray-900">{storeName}</span>
+          <span className="text-lg font-bold text-gray-900">{storeName}</span>
         </Link>
 
         <Link
           href={`/${slug}/carrinho`}
-          className="relative flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="relative flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -39,7 +39,7 @@ export default function StoreHeader({ slug, storeName, logo }: StoreHeaderProps)
           </svg>
           <span className="font-medium">Carrinho</span>
           {totalItems > 0 && (
-            <span className="absolute -top-2 -right-2 flex items-center justify-center w-6 h-6 bg-red-500 text-white text-xs font-bold rounded-full">
+            <span className="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full">
               {totalItems}
             </span>
           )}
