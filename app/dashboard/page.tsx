@@ -1,17 +1,31 @@
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import AdminLayout from '@/components/admin/AdminLayout'
 import Link from 'next/link'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
   
-  const { data: store } = await supabase.from('stores').select('*').limit(1).single()
+  // Verificar autenticação
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    redirect('/login')
+  }
+  
+  const { data: store } = await supabase.from('stores').select('*').eq('owner_id', user.id).single()
+  
+  // Se não tem loja, redirecionar para criar
+  if (!store) {
+    // TODO: criar página de setup inicial
+    redirect('/login')
+  }
+  
   const { count: productsCount } = await supabase.from('products').select('*', { count: 'exact', head: true })
-  const { count: ordersCount } = await supabase.from('pre_orders').select('*', { count: 'exact', head: true }).eq('store_id', store?.id || '')
+  const { count: ordersCount } = await supabase.from('pre_orders').select('*', { count: 'exact', head: true }).eq('store_id', store.id)
   const { data: recentOrders } = await supabase
     .from('pre_orders')
     .select('*')
-    .eq('store_id', store?.id || '')
+    .eq('store_id', store.id)
     .order('created_at', { ascending: false })
     .limit(5)
   

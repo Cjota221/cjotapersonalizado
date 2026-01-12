@@ -14,10 +14,10 @@ export default async function ProductsPage() {
   const { data: store } = await supabase
     .from('stores')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('owner_id', user.id)
     .single()
 
-  if (!store) redirect('/dashboard/setup')
+  if (!store) redirect('/login')
 
   // Buscar produtos
   const { data: products } = await supabase
