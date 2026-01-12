@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import StoreHeader from '@/components/StoreHeader'
+import DynamicStyles from '@/components/DynamicStyles'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -69,12 +70,7 @@ export default async function StorePage({ params }: PageProps) {
 
   return (
     <>
-      <style jsx global>{`
-        :root {
-          --store-primary: ${primaryColor};
-          --store-button: ${buttonColor};
-        }
-      `}</style>
+      <DynamicStyles colors={{ primary: primaryColor, button: buttonColor }} />
 
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
