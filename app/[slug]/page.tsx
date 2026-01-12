@@ -115,41 +115,38 @@ export default async function StorePage({ params }: PageProps) {
                 const price = product.price_cents / 100
 
                 return (
-                  <Link 
+                  <div
                     key={product.id}
-                    href={`/${slug}/produto/${product.id}`}
-                    className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all border border-gray-200 overflow-hidden group"
+                    className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all overflow-hidden"
                   >
-                    <div className="relative aspect-square bg-gray-100">
-                      <Image
-                        src={firstImage}
-                        alt={product.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    
-                    <div className="p-3">
-                      <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors text-sm">
-                        {product.name}
-                      </h3>
-                      
-                      {product.description && (
-                        <p className="text-xs text-gray-600 mb-2 line-clamp-2">
-                          {product.description}
-                        </p>
-                      )}
-                      
-                      <div className="flex items-center justify-between">
-                        <span className="text-lg font-bold text-gray-900">
-                          R$ {price.toFixed(2)}
-                        </span>
-                        <span className="text-xs text-blue-600 font-medium">
-                          Ver detalhes →
-                        </span>
+                    <Link href={`/${slug}/produto/${product.id}`}>
+                      <div className="relative aspect-square bg-gray-100">
+                        <Image
+                          src={firstImage}
+                          alt={product.name}
+                          fill
+                          className="object-cover"
+                        />
                       </div>
-                    </div>
-                  </Link>
+                      
+                      <div className="p-3">
+                        <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 text-sm min-h-[2.5rem]">
+                          {product.name}
+                        </h3>
+                        
+                        <p className="text-xl font-bold mb-3" style={{ color: '#e91e63' }}>
+                          R$ {price.toFixed(2)}
+                        </p>
+                        
+                        <button 
+                          className="w-full py-2.5 px-4 text-white font-semibold rounded-full transition-all hover:opacity-90 text-sm"
+                          style={{ backgroundColor: '#e91e63' }}
+                        >
+                          Ver Produto
+                        </button>
+                      </div>
+                    </Link>
+                  </div>
                 )
               })}
             </div>
