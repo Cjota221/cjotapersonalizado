@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos - Admin</title>
+  <link rel="stylesheet" href="/css/nuvemshop-admin.css">
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <a href="/admin" class="sidebar-logo">CJota Admin</a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Principal</div>
+          <a href="/admin" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Dashboard
+          </a>
+          <a href="/admin/produtos" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3h18v18H3z"></path>
+              <path d="M3 9h18"></path>
+              <path d="M9 21V9"></path>
+            </svg>
+            Produtos
+          </a>
+          <a href="/admin/pedidos" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 2L3 8v13h18V8l-6-6H9z"></path>
+              <polyline points="9 8 9 2 15 2 15 8"></polyline>
+            </svg>
+            Pedidos
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Loja</div>
+          <a href="/admin/catalogo" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            Catálogo & Layout
+          </a>
+          <a href="/admin/configuracoes" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M12 1v6m0 6v6m4.22-13.22l-4.24 4.24m0 6l-4.24 4.24m10.48-4.24l-4.24-4.24m0 6l4.24 4.24"></path>
+            </svg>
+            Configurações
+          </a>
+        </div>
+      </nav>
+    </aside>
+    
+    <!-- Conteúdo Principal -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <h1 class="page-title">Produtos</h1>
+        <div class="header-actions">
+          <a href="/" target="_blank" class="btn btn-secondary btn-sm">Ver loja</a>
+          <a href="/admin/produtos/novo" class="btn btn-primary">Adicionar produto</a>
+        </div>
+      </header>
+      
+      <div class="admin-content">
+        <!-- Filtros -->
+        <div class="filters-bar">
+          <input 
+            type="search" 
+            class="form-input search-input" 
+            placeholder="Buscar por nome ou SKU..."
+          >
+          <select class="form-select filter-select">
+            <option value="">Todos os status</option>
+            <option value="active">Ativo</option>
+            <option value="inactive">Inativo</option>
+          </select>
+          <select class="form-select filter-select">
+            <option value="">Todas as categorias</option>
+            <option value="vestidos">Vestidos</option>
+            <option value="blusas">Blusas</option>
+            <option value="calcas">Calças</option>
+          </select>
+        </div>
+        
+        <!-- Tabela de Produtos -->
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 60px;"></th>
+                <th>Produto</th>
+                <th>SKU</th>
+                <th>Status</th>
+                <th>Estoque</th>
+                <th style="width: 120px;">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <img src="https://via.placeholder.com/48" alt="Produto" class="product-thumb">
+                </td>
+                <td>
+                  <strong>Vestido Floral Primavera</strong><br>
+                  <span style="font-size: 12px; color: #6f767e;">3 variações</span>
+                </td>
+                <td>VEST001</td>
+                <td>
+                  <span class="badge badge-success">Ativo</span>
+                </td>
+                <td>33 unidades</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn btn-ghost btn-sm">Editar</button>
+                    <button class="btn btn-ghost btn-sm">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img src="https://via.placeholder.com/48" alt="Produto" class="product-thumb">
+                </td>
+                <td>
+                  <strong>Blusa Lisa Básica</strong><br>
+                  <span style="font-size: 12px; color: #6f767e;">5 variações</span>
+                </td>
+                <td>BLUS001</td>
+                <td>
+                  <span class="badge badge-success">Ativo</span>
+                </td>
+                <td>85 unidades</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn btn-ghost btn-sm">Editar</button>
+                    <button class="btn btn-ghost btn-sm">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img src="https://via.placeholder.com/48" alt="Produto" class="product-thumb">
+                </td>
+                <td>
+                  <strong>Calça Jeans Skinny</strong><br>
+                  <span style="font-size: 12px; color: #6f767e;">4 variações</span>
+                </td>
+                <td>CALC001</td>
+                <td>
+                  <span class="badge badge-neutral">Inativo</span>
+                </td>
+                <td>0 unidades</td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn btn-ghost btn-sm">Editar</button>
+                    <button class="btn btn-ghost btn-sm">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
