@@ -12,41 +12,59 @@ export default async function DashboardPage() {
     redirect('/login')
   }
   
-  // Buscar ou criar loja
-  let { data: store } = await supabase.from('stores').select('*').eq('owner_id', user.id).single()
+  // Buscar loja
+  const { data: stores, error: storeError } = await supabase
+    .from('stores')
+    .select('*')
+    .eq('owner_id', user.id)
+  
+  let store = stores && stores.length > 0 ? stores[0] : null
   
   // Se não tem loja, criar uma automaticamente
   if (!store) {
-    const { data: newStore, error } = await supabase.from('stores').insert({
-      owner_id: user.id,
-      slug: `loja-${user.email?.split('@')[0] || 'user'}`,
-      store_name: `Loja de ${user.email?.split('@')[0] || 'Usuário'}`,
-      colors: { primary: '#000000', button: '#000000', background: '#ffffff' },
-      loja_configurada: false
-    }).select().single()
+    const slug = `loja-${user.email?.split('@')[0]?.toLowerCase() || Date.now()}`
     
-    if (error) {
-      console.error('Erro ao criar loja:', error)
-    } else {
-      store = newStore
-    }
-  }
-  
-  // Se ainda não tem loja, mostrar erro amigável
-  if (!store) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f8f9fa' }}>
-        <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
-          <h1 className="text-2xl font-bold mb-4" style={{ color: '#1a1a1a' }}>Erro ao carregar loja</h1>
-          <p className="text-sm mb-6" style={{ color: '#666666' }}>
-            Não foi possível criar sua loja automaticamente. Entre em contato com o suporte.
-          </p>
-          <Link href="/login" className="px-6 py-2 rounded-full font-semibold" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
-            Voltar para Login
-          </Link>
+    const { data: newStore, error: insertError } = await supabase
+      .from('stores')
+      .insert({
+        owner_id: user.id,
+        slug: slug,
+        store_name: `Loja de ${user.email?.split('@')[0] || 'Usuário'}`,
+        colors: { primary: '#000000', button: '#000000', background: '#ffffff' },
+        loja_configurada: false
+      })
+      .select()
+      .single()
+    
+    if (insertError) {
+      console.error('Erro ao criar loja:', insertError)
+      
+      // Mostrar erro amigável
+      return (
+        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f8f9fa' }}>
+          <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-lg">
+            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#fee2e2' }}>
+              <svg className="w-8 h-8" style={{ color: '#ef4444' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold mb-2" style={{ color: '#1a1a1a' }}>Erro ao criar loja</h1>
+            <p className="text-sm mb-4" style={{ color: '#666666' }}>
+              {insertError.message || 'Não foi possível criar sua loja automaticamente.'}
+            </p>
+            <details className="text-xs text-left mb-6 p-4 rounded" style={{ backgroundColor: '#f5f5f5', color: '#666666' }}>
+              <summary className="cursor-pointer font-medium mb-2">Detalhes técnicos</summary>
+              <pre>{JSON.stringify(insertError, null, 2)}</pre>
+            </details>
+            <Link href="/login" className="inline-block px-6 py-2 rounded-full font-semibold" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+              Voltar para Login
+            </Link>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
+    
+    store = newStore
   }
   
   const { count: productsCount } = await supabase.from('products').select('*', { count: 'exact', head: true })
