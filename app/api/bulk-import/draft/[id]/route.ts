@@ -2,9 +2,15 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
+type RouteContext = {
+  params: {
+    id: string;
+  };
+};
+
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     const supabase = await createClient();
@@ -14,7 +20,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const { id: draftId } = params;
+    const draftId = context.params.id;
     const updates = await request.json();
 
     const { data: draft, error } = await supabase
@@ -42,7 +48,7 @@ export async function PUT(
 // DELETE - Deleta um rascunho
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     const supabase = await createClient();
@@ -52,7 +58,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const { id: draftId } = params;
+    const draftId = context.params.id;
 
     const { error } = await supabase
       .from('draft_products')

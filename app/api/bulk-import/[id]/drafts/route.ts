@@ -2,9 +2,15 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
+type RouteContext = {
+  params: {
+    id: string;
+  };
+};
+
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     const supabase = await createClient();
@@ -14,7 +20,7 @@ export async function GET(
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const { id: importId } = params;
+    const importId = context.params.id;
 
     // Buscar rascunhos com imagens
     const { data: drafts, error } = await supabase

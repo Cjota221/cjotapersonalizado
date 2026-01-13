@@ -2,9 +2,15 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
+type RouteContext = {
+  params: {
+    id: string;
+  };
+};
+
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     const supabase = await createClient();
@@ -14,7 +20,7 @@ export async function POST(
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const { id: importId } = params;
+    const importId = context.params.id;
 
     // Buscar rascunhos prontos
     const { data: drafts, error: draftsError } = await supabase
@@ -25,7 +31,10 @@ export async function POST(
 
     if (draftsError) throw draftsError;
 
-    const results = {
+    const results: {
+      created: Array<{ draft_id: string; product_id: string; name: string }>;
+      failed: Array<{ draft_id: string; name: string; error: string }>;
+    } = {
       created: [],
       failed: []
     };
