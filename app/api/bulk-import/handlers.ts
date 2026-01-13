@@ -10,6 +10,36 @@ import BulkImportService from '@/src/services/BulkImportService';
 const bulkService = new BulkImportService();
 
 // ====================================
+// INTERFACES
+// ====================================
+interface DraftProduct {
+  id: string;
+  name: string;
+  group_key: string;
+  description?: string;
+  price?: number;
+  stock_quantity?: number;
+  category_id?: string;
+  tags?: string[];
+  status?: string;
+}
+
+interface UploadedImage {
+  filename: string;
+  url: string;
+  size: number;
+}
+
+interface GroupedImages {
+  [key: string]: UploadedImage[];
+}
+
+interface CreateResult {
+  created: Array<{ draft_id: string; product_id: string; name: string }>;
+  failed: Array<{ draft_id: string; name: string; error: string }>;
+}
+
+// ====================================
 // POST /api/bulk-import/create
 // Cria nova sessão de importação
 // ====================================
@@ -68,19 +98,19 @@ export async function POST_upload(request: Request) {
     }
 
     // Upload dos arquivos
-    const uploadedImages = await bulkService.uploadFiles(importId, files);
+    const uploadedImages = await bulkService.uploadFiles(importId, files) as UploadedImage[];
 
     // Agrupar imagens automaticamente
-    const groups = bulkService.groupImagesByPattern(uploadedImages);
+    const groups = bulkService.groupImagesByPattern(uploadedImages) as GroupedImages;
 
     // Criar rascunhos a partir dos grupos
-    const drafts = await bulkService.createDraftsFromGroups(importId, groups);
+    const drafts = await bulkService.createDraftsFromGroups(importId, groups) as DraftProduct[];
 
     return NextResponse.json({
       success: true,
       total_files: uploadedImages.length,
       total_groups: Object.keys(groups).length,
-      drafts: drafts.map(d => ({
+      drafts: drafts.map((d: DraftProduct) => ({
         id: d.id,
         name: d.name,
         group_key: d.group_key,
@@ -286,7 +316,7 @@ export async function POST_validate(importId: string) {
 // ====================================
 export async function POST_createProducts(importId: string) {
   try {
-    const results = await bulkService.createProductsFromDrafts(importId);
+    const results = await bulkService.createProductsFromDrafts(importId) as CreateResult;
 
     // Limpar arquivos temporários em background
     bulkService.cleanupTempFiles(importId).catch(console.error);
