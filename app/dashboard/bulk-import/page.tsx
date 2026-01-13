@@ -15,8 +15,10 @@ export default function BulkImportUploadPage() {
 
   // Criar sessão de importação
   const createImportSession = async () => {
+    console.log('🆕 Chamando /api/bulk-import/create...');
     const res = await fetch('/api/bulk-import/create', { method: 'POST' });
     const data = await res.json();
+    console.log('📋 Resposta da criação:', data);
     if (!data.success) throw new Error(data.error);
     return data.import_id;
   };
@@ -24,14 +26,18 @@ export default function BulkImportUploadPage() {
   // Upload de arquivos
   const uploadFiles = async (files: File[]) => {
     try {
+      console.log('📤 Iniciando uploadFiles com', files.length, 'arquivos');
       setUploading(true);
       setProgress(10);
 
       // Criar sessão
+      console.log('🔄 Criando sessão de importação...');
       const importId = await createImportSession();
+      console.log('✅ Sessão criada:', importId);
       setProgress(20);
 
       // Preparar FormData
+      console.log('📦 Preparando FormData...');
       const formData = new FormData();
       formData.append('import_id', importId);
       files.forEach(file => formData.append('files', file));
@@ -39,12 +45,14 @@ export default function BulkImportUploadPage() {
       setProgress(40);
 
       // Upload
+      console.log('⬆️ Enviando para /api/bulk-import/upload...');
       const res = await fetch('/api/bulk-import/upload', {
         method: 'POST',
         body: formData
       });
 
       const data = await res.json();
+      console.log('📥 Resposta:', data);
       setProgress(100);
 
       if (!data.success) throw new Error(data.error);
@@ -110,8 +118,14 @@ export default function BulkImportUploadPage() {
   };
 
   const handleStartUpload = () => {
+    console.log('🚀 handleStartUpload chamado');
+    console.log('📁 Arquivos selecionados:', selectedFiles.length);
+    
     if (selectedFiles.length > 0) {
+      console.log('✅ Iniciando upload...');
       uploadFiles(selectedFiles);
+    } else {
+      console.error('❌ Nenhum arquivo selecionado');
     }
   };
 
