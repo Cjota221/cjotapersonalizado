@@ -198,6 +198,8 @@ export default function BulkImportUploadPage() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
+                    alert('🎯 Botão clicado! Arquivos: ' + selectedFiles.length);
+                    console.log('🚀 handleStartUpload chamado');
                     handleStartUpload();
                   }}
                   className="px-6 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
