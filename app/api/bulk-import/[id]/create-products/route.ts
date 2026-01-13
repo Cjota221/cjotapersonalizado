@@ -2,15 +2,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
-type RouteContext = {
-  params: {
-    id: string;
-  };
-};
-
 export async function POST(
   request: Request,
-  context: RouteContext
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await createClient();
@@ -20,7 +14,7 @@ export async function POST(
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const importId = context.params.id;
+    const { id: importId } = await params;
 
     // Buscar rascunhos prontos
     const { data: drafts, error: draftsError } = await supabase
