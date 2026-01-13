@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const supabase = await createClient();
@@ -14,7 +14,7 @@ export async function POST(
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const importId = params.id;
+    const { id: importId } = context.params;
 
     // Buscar rascunhos prontos
     const { data: drafts, error: draftsError } = await supabase

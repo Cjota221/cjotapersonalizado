@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const supabase = await createClient();
@@ -14,7 +14,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const draftId = params.id;
+    const { id: draftId } = context.params;
     const updates = await request.json();
 
     const { data: draft, error } = await supabase
@@ -42,7 +42,7 @@ export async function PUT(
 // DELETE - Deleta um rascunho
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const supabase = await createClient();
@@ -52,7 +52,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
     }
 
-    const draftId = params.id;
+    const { id: draftId } = context.params;
 
     const { error } = await supabase
       .from('draft_products')

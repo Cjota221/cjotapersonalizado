@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
 
@@ -21,9 +20,8 @@ interface DraftImage {
   is_primary: boolean;
 }
 
-export default function BulkImportEditPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const importId = resolvedParams.id;
+export default function BulkImportEditPage({ params }: { params: { id: string } }) {
+  const importId = params.id;
   const router = useRouter();
 
   const [drafts, setDrafts] = useState<DraftProduct[]>([]);

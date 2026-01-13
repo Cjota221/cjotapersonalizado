@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
 
@@ -15,9 +14,8 @@ interface ImportSummary {
   completed_at: string;
 }
 
-export default function BulkImportSummaryPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
-  const importId = resolvedParams.id;
+export default function BulkImportSummaryPage({ params }: { params: { id: string } }) {
+  const importId = params.id;
   const router = useRouter();
 
   const [summary, setSummary] = useState<ImportSummary | null>(null);
