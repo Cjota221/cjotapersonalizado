@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import CurrencyInput from '@/components/CurrencyInput'
 
 interface Variant {
   id: string
@@ -346,15 +347,12 @@ export default function NewProductPage() {
                       <label className="block text-xs font-medium mb-1" style={{ color: '#666666' }}>
                         Preço (R$)
                       </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={variant.price_cents / 100 || ''}
-                        onChange={(e) => updateVariant(variant.id, 'price_cents', parseFloat(e.target.value) || 0)}
-                        className="w-full px-3 py-2 rounded-lg border text-sm"
+                      <CurrencyInput
+                        value={variant.price_cents}
+                        onChange={(cents) => updateVariant(variant.id, 'price_cents', cents)}
+                        className="border-gray-300 bg-white"
                         style={{ borderColor: '#e5e7eb', backgroundColor: '#ffffff' }}
-                        placeholder="99.90"
+                        placeholder="0,00"
                       />
                     </div>
                   </div>

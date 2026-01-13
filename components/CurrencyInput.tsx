@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface CurrencyInputProps {
   value: number; // valor em centavos
@@ -17,17 +17,9 @@ export default function CurrencyInput({
   className = "",
   style = {}
 }: CurrencyInputProps) {
-  const [displayValue, setDisplayValue] = useState('');
-
-  // Converte centavos para display (29.90 centavos → "29,90")
-  useEffect(() => {
-    if (value === 0) {
-      setDisplayValue('');
-    } else {
-      const reais = (value / 100).toFixed(2).replace('.', ',');
-      setDisplayValue(reais);
-    }
-  }, [value]);
+  // Converte centavos para display inicial
+  const initialDisplay = value === 0 ? '' : (value / 100).toFixed(2).replace('.', ',');
+  const [displayValue, setDisplayValue] = useState(initialDisplay);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let input = e.target.value;
