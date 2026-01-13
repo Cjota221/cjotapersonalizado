@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS draft_products (
   track_inventory BOOLEAN DEFAULT true,
   
   -- Categorização
-  category_id UUID REFERENCES categories(id),
+  category_id UUID, -- Removido REFERENCES categories(id) - tabela não existe
   tags TEXT[], -- Array de tags
   
   -- Status e validação
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS bulk_import_defaults (
   -- Valores padrão aplicáveis a todos os rascunhos
   default_price DECIMAL(10,2),
   default_stock INTEGER,
-  default_category_id UUID REFERENCES categories(id),
+  default_category_id UUID, -- Removido REFERENCES categories(id) - tabela não existe
   default_tags TEXT[],
   default_is_active BOOLEAN DEFAULT true,
   
