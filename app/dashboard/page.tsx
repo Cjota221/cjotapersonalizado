@@ -12,12 +12,41 @@ export default async function DashboardPage() {
     redirect('/login')
   }
   
-  const { data: store } = await supabase.from('stores').select('*').eq('owner_id', user.id).single()
+  // Buscar ou criar loja
+  let { data: store } = await supabase.from('stores').select('*').eq('owner_id', user.id).single()
   
-  // Se não tem loja, redirecionar para criar
+  // Se não tem loja, criar uma automaticamente
   if (!store) {
-    // TODO: criar página de setup inicial
-    redirect('/login')
+    const { data: newStore, error } = await supabase.from('stores').insert({
+      owner_id: user.id,
+      slug: `loja-${user.email?.split('@')[0] || 'user'}`,
+      store_name: `Loja de ${user.email?.split('@')[0] || 'Usuário'}`,
+      colors: { primary: '#000000', button: '#000000', background: '#ffffff' },
+      loja_configurada: false
+    }).select().single()
+    
+    if (error) {
+      console.error('Erro ao criar loja:', error)
+    } else {
+      store = newStore
+    }
+  }
+  
+  // Se ainda não tem loja, mostrar erro amigável
+  if (!store) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#f8f9fa' }}>
+        <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
+          <h1 className="text-2xl font-bold mb-4" style={{ color: '#1a1a1a' }}>Erro ao carregar loja</h1>
+          <p className="text-sm mb-6" style={{ color: '#666666' }}>
+            Não foi possível criar sua loja automaticamente. Entre em contato com o suporte.
+          </p>
+          <Link href="/login" className="px-6 py-2 rounded-full font-semibold" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+            Voltar para Login
+          </Link>
+        </div>
+      </div>
+    )
   }
   
   const { count: productsCount } = await supabase.from('products').select('*', { count: 'exact', head: true })
