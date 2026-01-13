@@ -684,18 +684,6 @@ class BulkImportService {
     };
     return mimeTypes[ext] || 'application/octet-stream';
   }
-}
-
-module.exports = BulkImportService;
-    } catch (error) {
-      // Registrar erro
-      await this.db.run(
-        'UPDATE bulk_imports SET status = ?, error_message = ? WHERE id = ?',
-        ['erro', error.message, importId]
-      );
-      throw error;
-    }
-  }
 
   /**
    * Agrupa arquivos por padrão de nome
