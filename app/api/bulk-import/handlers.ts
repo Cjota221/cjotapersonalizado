@@ -5,7 +5,7 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { BulkImportService } from '@/services/BulkImportService';
+import BulkImportService from '@/src/services/BulkImportService';
 
 const bulkService = new BulkImportService();
 
